@@ -15,7 +15,9 @@ $files = 'tm-bridge.js','RUNBOOK.md','restore-typingmind.ps1','restore-typingmin
          'emit-keys-for-paste.ps1','emit-keys-for-paste.cmd','push-kit.ps1',
          'run_bridge_hidden.vbs','run_watchdog_hidden.vbs','watchdog.ps1',
          'run_runner_hidden.vbs','run_runner_watchdog_hidden.vbs','runner_watchdog.ps1',
-         'credman.ps1','migrate-to-vault.ps1','vault-test.js','extract-mcp-config.ps1'
+         'start_chrome_debug.ps1','run_chrome_debug_hidden.vbs','chrome_cdp_watchdog.ps1',
+         'run_kit_sync_hidden.vbs','extract-mcp-config.ps1',
+         'credman.ps1','migrate-to-vault.ps1','vault-test.js'
 foreach ($f in $files) { if (Test-Path "$src\$f") { Copy-Item "$src\$f" "$stage\$f" -Force } }
 foreach ($d in 'typingmind-rebuild') {
   if (Test-Path "$src\$d") {
