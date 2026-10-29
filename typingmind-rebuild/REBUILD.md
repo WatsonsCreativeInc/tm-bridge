@@ -20,12 +20,27 @@
 
 1. Install Node.js (winget `OpenJS.NodeJS.LTS`).
 2. Install AutoHotkey v2 (winget `AutoHotkey.AutoHotkey`).
-3. `git clone https://github.com/WatsonsCreativeInc/tm-bridge.git`
-4. Copy `tm-bridge.js` + launchers to `C:\Users\shawn\tm-bridge\`,
+3. Set execution policy: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned -Force`
+4. `git clone https://github.com/WatsonsCreativeInc/tm-bridge.git`
+5. Copy `tm-bridge.js` + all launcher/watchdog scripts to `C:\Users\shawn\tm-bridge\`,
    build qbo-mcp (npm install + tsc in `C:\Users\shawn\qbo-mcp\`).
-5. Re-register 3 scheduled tasks (commands in RUNBOOK.md section 2).
-6. Re-enter 6 secrets into Credential Manager (RUNBOOK section 6).
-7. Then follow Scenario A from step 1.
+6. Re-register 5 scheduled tasks (TM-Bridge, TM-Bridge-Watchdog, TM-Runner-Watchdog,
+   TM-Chrome-Debug, TM-Kit-Sync) - commands in RUNBOOK section 2, always with
+   `-AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Days 3650)`.
+7. Re-enter 6 secrets into Credential Manager (RUNBOOK section 6), using
+   `credman.ps1 -Set -Name <name>` (value via stdin, not command line).
+8. Then follow Scenario A from step 1.
+
+## Chrome Debug Port (CDP)
+
+- Task `TM-Chrome-Debug` (logon) launches Chrome with `--remote-debugging-port=9222`
+  if Chrome isn't running; `chrome_cdp_watchdog.ps1` is available for minute-level
+  coverage if ever registered.
+- If Chrome is running WITHOUT the flag, neither script kills it - relaunch
+  Chrome manually (or just close all Chrome windows and run
+  `start_chrome_debug.ps1`) to get CDP back.
+- Why CDP matters: it enables live reading/writing of TypingMind browser
+  storage (config capture, restore verification) without closing the browser.
 
 ## Capture discipline (prevents the NEXT loss)
 

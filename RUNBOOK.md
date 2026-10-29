@@ -31,6 +31,8 @@ Everything self-heals within ~60 seconds (runner/bridge: <1s–60s).
 | `TM-Bridge` | Launches bridge hidden via wscript | At startup |
 | `TM-Bridge-Watchdog` | Checks port 8787 every minute; revives via TM-Bridge task | Every 60s |
 | `TM-Runner-Watchdog` | Checks port 50880 every minute; revives runner direct-node | Every 60s |
+| `TM-Chrome-Debug` | At logon, ensures Chrome runs with `--remote-debugging-port=9222` (launches only if Chrome not running; never kills a running browser) | At logon |
+| `TM-Kit-Sync` | Runs push-kit.ps1: harvests estate -> secret-scan -> push GitHub -> pull desktop clone -> 3-way verify | Mondays 09:00 |
 
 ### Files in `C:\Users\shawn\tm-bridge\`
 | File | Purpose |
@@ -42,7 +44,12 @@ Everything self-heals within ~60 seconds (runner/bridge: <1s–60s).
 | `run_runner_hidden.vbs` | Hidden launcher for @typingmind/mcp runner (direct node, dynamic npx-cache path) |
 | `run_runner_watchdog_hidden.vbs` | Hidden wrapper for runner watchdog |
 | `runner_watchdog.ps1` | Runner watchdog (port 50880 check) |
-| `migrate-to-vault.ps1`, `credman.ps1`, `vault-test.js` | Vault tooling (used once) |
+| `start_chrome_debug.ps1`, `run_chrome_debug_hidden.vbs`, `chrome_cdp_watchdog.ps1` | Chrome CDP coverage (logon launcher + passive watchdog) |
+| `run_kit_sync_hidden.vbs`, `push-kit.ps1` | Kit sync wrapper + 3-way mirror engine (GitHub + desktop clone) |
+| `restore-typingmind.ps1`, `restore-typingmind.cmd` | One-command machine-side restoral |
+| `emit-keys-for-paste.ps1`, `emit-keys-for-paste.cmd` | Post-crash key re-entry helper (clipboard, vault-read) |
+| `extract-mcp-config.ps1` | Leveldb MCP-config extractor (offline capture from Chrome) |
+| `credman.ps1`, `migrate-to-vault.ps1`, `vault-test.js` | Vault tooling |
 | `watchdog.log`, `~\.tm-bridge\runner_watchdog.log` | Recovery audit logs |
 | `*.bak-*` | Backups (do not delete casually) |
 
