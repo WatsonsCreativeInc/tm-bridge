@@ -37,21 +37,25 @@ if ($fail.Count -gt 0) { Write-Output "SECRET SCAN FAIL - push aborted:"; $fail;
 Write-Output "secret scan: clean"
 
 # ---- commit + push (PAT from vault) ----
+$ErrorActionPreference = 'Continue'
 Set-Location $stage
 $pat = & 'C:\Users\shawn\tm-bridge\credman.ps1' -Get -Name githubPat
-if (-not $pat -or $pat.Length -lt 20) { Write-Output 'VAULT READ FAILED'; exit 1 }
+if (-not $pat -or $pat.Length -lt 20) { Write-Output 'VAULT READ FAILED'; git remote set-url origin "https://WatsonsCreativeInc@github.com/WatsonsCreativeInc/tm-bridge.git"; exit 1 }
 git remote set-url origin "https://WatsonsCreativeInc:$pat@github.com/WatsonsCreativeInc/tm-bridge.git"
 git add -A
 $commitOut = git commit -m $msg 2>&1 | Out-String
 Write-Output ($commitOut.Trim() -split "`n" | Select-Object -Last 2)
-git push origin main 2>&1 | Out-String | ForEach-Object { ($_ -split "`n" | Where-Object { $_ -match 'main|rejected|error' }) -join '; ' }
+git push origin main 2>&1 | Out-Null
 $pushExit = $LASTEXITCODE
 git remote set-url origin "https://WatsonsCreativeInc@github.com/WatsonsCreativeInc/tm-bridge.git"
 if ($pushExit -ne 0) { Write-Output "PUSH FAILED (exit $pushExit)"; exit 1 }
 
 # ---- desktop clone: pull to match ----
+$ErrorActionPreference = 'Continue'
 Set-Location $desk
-git pull origin main 2>&1 | Out-String | ForEach-Object { ($_ -split "`n" | Select-Object -Last 1) }
+$pullOut = git pull origin main 2>&1 | Out-String
+Write-Output ($pullOut.Trim() -split "`n" | Select-Object -Last 1)
+$ErrorActionPreference = 'Stop'
 
 # ---- verify both ends match ----
 $stageHash = (git -C $stage rev-parse HEAD).Trim()
