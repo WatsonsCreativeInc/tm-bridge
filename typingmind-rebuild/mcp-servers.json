@@ -1,4 +1,79 @@
-﻿{
-  "_NOTE": "Canonical TypingMind MCP config. Known pins: chrome-devtools-mcp@1.12.0 (+ --allow-unrestricted-paths), mcp-gsc@0.4.1; quickbooks runs direct node C:\\Users\\shawn\\qbo-mcp\\dist\\index.js; the rest launch via npx. PASTE the full config from TypingMind (Settings > Plugins > export) or run: restore-typingmind.ps1 -CaptureExport <path-to-TypingMind-export.json>",
-  "mcpServers": {}
+{
+  "_NOTE": "Canonical TypingMind MCP config, reconstructed 2026-10-29 from live browser leveldb capture (005530.ldb @ 1635960). Secrets replaced with vault: refs - read real values at restore time via credman.ps1. GSC credentials path references the local OAuth client_secret file on disk (a file path, not a secret). Paste into TypingMind Settings > MCP/Plugins; replace vault: refs with real values first.",
+  "_SECRET_MAP": {
+    "GITHUB_PERSONAL_ACCESS_TOKEN": "vault:githubPat (credman.ps1 -Get -Name githubPat)",
+    "RENDER Authorization": "Bearer vault:renderToken",
+    "WOOCOMMERCE_CONSUMER_KEY": "vault:wooKey",
+    "WOOCOMMERCE_CONSUMER_SECRET": "vault:wooSecret",
+    "EXA_API_KEY": "vault:exaApiKey"
+  },
+  "mcpServers": {
+    "filesystem": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-filesystem", "C:\\Users\\shawn"]
+    },
+    "chrome-devtools": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "chrome-devtools-mcp@1.12.0", "--allow-unrestricted-paths"]
+    },
+    "sequential-thinking": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "memory": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-memory"]
+    },
+    "github": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "vault:githubPat" }
+    },
+    "render": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "mcp-remote", "https://mcp.render.com/mcp"],
+      "headers": {
+        "Authorization": "Bearer vault:renderToken",
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }
+    },
+    "woocommerce": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "mcp-woocommerce"],
+      "env": {
+        "WORDPRESS_SITE_URL": "https://adventuresofbuttholekitty.com",
+        "WOOCOMMERCE_CONSUMER_KEY": "vault:wooKey",
+        "WOOCOMMERCE_CONSUMER_SECRET": "vault:wooSecret"
+      }
+    },
+    "win-cli": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@simonb97/server-win-cli", "--config", "C:\\Users\\shawn\\.win-cli-mcp\\config.json"]
+    },
+    "quickbooks": {
+      "command": "node",
+      "args": ["C:\\Users\\shawn\\qbo-mcp\\dist\\index.js"]
+    },
+    "desktop-commander": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@wonderwhy-er/desktop-commander"]
+    },
+    "exa": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "exa-mcp-server"],
+      "env": { "EXA_API_KEY": "vault:exaApiKey" }
+    },
+    "gsc": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "mcp-gsc@0.4.1"],
+      "env": {
+        "GOOGLE_GSC_CREDENTIALS_PATH": "C:\\Users\\shawn\\.mcp\\client_secret_338680529222-siq546io38v9b7gh63gsn2gre6ilf8bc.apps.googleusercontent.com"
+      }
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest", "--caps=network,storage"]
+    }
+  }
 }
