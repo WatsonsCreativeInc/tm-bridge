@@ -1,0 +1,4 @@
+﻿{
+  "_NOTE": "Canonical TypingMind MCP config. Known pins: chrome-devtools-mcp@1.12.0 (+ --allow-unrestricted-paths), mcp-gsc@0.4.1; quickbooks runs direct node C:\\Users\\shawn\\qbo-mcp\\dist\\index.js; the rest launch via npx. PASTE the full config from TypingMind (Settings > Plugins > export) or run: restore-typingmind.ps1 -CaptureExport <path-to-TypingMind-export.json>",
+  "mcpServers": {}
+}
