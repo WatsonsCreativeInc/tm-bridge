@@ -1,0 +1,70 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Local Tools Bridge v2",
+    "version": "2.0.0",
+    "description": "Local tools: shell, processes, files, GitHub, Exa search, WooCommerce, QuickBooks, Render, Google Search Console, knowledge graph, Chrome control. Runs on this PC only."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8787"
+    }
+  ],
+  "paths": {
+    "/call": {
+      "post": {
+        "operationId": "callTool",
+        "summary": "Call a local tool by name with args",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "tool"
+                ],
+                "properties": {
+                  "tool": {
+                    "type": "string",
+                    "enum": [
+                      "run_command",
+                      "proc_list",
+                      "proc_kill",
+                      "fs_list",
+                      "fs_read_text",
+                      "fs_write_text",
+                      "fs_edit_block",
+                      "fs_search",
+                      "fs_delete",
+                      "fs_mkdir",
+                      "github_api",
+                      "web_search_exa",
+                      "woo_api",
+                      "qbo_api",
+                      "render_api",
+                      "gsc_refresh_and_call",
+                      "knowledge_graph_write",
+                      "knowledge_graph_search",
+                      "chrome_control"
+                    ],
+                    "description": "Tool to run"
+                  },
+                  "args": {
+                    "type": "object",
+                    "description": "Args: run_command:{command}. fs_list:{dirPath}. fs_read_text:{filePath,maxBytes}. fs_write_text:{filePath,content,append}. fs_edit_block:{filePath,find,replace,replaceAll}. fs_search:{query,dirPath}. github_api:{method,endpoint,body}. web_search_exa:{query,numResults}. woo_api:{endpoint,method,query,body}. qbo_api:{sql}|{endpoint,method,body}. render_api:{endpoint,method,body}. gsc_refresh_and_call:{endpoint,method,body}. knowledge_graph_write:{subject,relation,object}. knowledge_graph_search:{query}. chrome_control:{action,url,expression}. proc_kill:{pid|name}."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tool result as JSON"
+          }
+        }
+      }
+    }
+  }
+}
